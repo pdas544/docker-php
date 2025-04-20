@@ -1,0 +1,41 @@
+
+services:
+  php-app:
+    build: .
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - php-nginx-network
+    depends_on:
+      - mysql
+
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php-app
+    networks:
+      - php-nginx-network
+    
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: test
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+networks:
+  php-nginx-network:
+    driver: bridge
+volumes:
+  mysql_data:
+
+
