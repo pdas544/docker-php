@@ -5,8 +5,8 @@
 // $servername  = "container-name" of the mysql container
 // $servername = "localhost" does not work.
 $servername = "pb-mysql";
-$username = "root";
-$password = "";
+$username = "user";         //user created in mysql
+$password = "password";     //password created in mysql
 $dbname = "app_db";
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
