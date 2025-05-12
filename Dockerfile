@@ -5,9 +5,8 @@ FROM php:8.3.20-fpm-alpine
 RUN docker-php-ext-install pdo pdo_mysql
 RUN docker-php-ext-install mysqli
 
-# Set working directory to Apache's default web root
+WORKDIR /var/www/html
 
-
-# Copy local files to the container
+COPY . .
 
 
