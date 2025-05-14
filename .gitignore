@@ -1,0 +1,5 @@
+src/vendor/
+.env
+*.log
+docker-compose.override.yml
+mysql_data/
