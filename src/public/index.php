@@ -1,7 +1,9 @@
 <?php
 
 // use src\Transaction;
-require_once '../Transaction.php';
+// require_once '../Transaction.php';
+require __DIR__.'/../vendor/autoload.php';
+use App\Transaction;
 
 // echo "<pre>";
 // print_r($_SERVER);
