@@ -6,6 +6,10 @@ namespace App;
 
 
 class Transaction{
+
+    //static property
+    private static int $transactionCount = 0;
+
     private const STATUS_PENDING = 'pending';
     public float $amount;
     public string $description;
@@ -13,10 +17,15 @@ class Transaction{
     public function __construct(float $amount = 0.0, string $description = ''){
         $this->amount = $amount;
         $this->description = $description;
-        var_dump(Transaction::STATUS_PENDING);  //access private constant like this 
+        // var_dump(Transaction::STATUS_PENDING);  //access private constant like this 
         //or using getter method
         // echo $this->getStatus();
-        var_dump(self::STATUS_PENDING); //access private constant like this
+        // var_dump(self::STATUS_PENDING); 
+        self::$transactionCount++;
+    }
+
+    public static function getTransactionCount(): ?int{
+        return self::$transactionCount;
     }
 
     public function addTax(float $taxRate): Transaction{

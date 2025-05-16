@@ -9,4 +9,6 @@
 - Constructor Property Promotion ✔️
 - Namespace ✔️
 - PSR-4, Autoloading, PHP-FIG ✔️
-- 
+- OOP - Class Constants ✔️
+- OOP - Static Properties ✔️
+
