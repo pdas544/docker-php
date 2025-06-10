@@ -34,6 +34,10 @@ class Invoice{
             throw new CustomException("Message cannot be empty");
         }
     }
+
+    public function process(){
+        throw InvoiceException::fromMessage("Processing error");
+    }
 }
 
 class CustomException extends Exception {
@@ -42,11 +46,19 @@ class CustomException extends Exception {
     }  
 }
 
-try {
-    $invoice = new Invoice();
-    $invoice->invalidAmount(-20); // This will throw an exception
-} catch (CustomException|Exception) {
-    echo "Caught exception".  PHP_EOL;
+$invoice = new Invoice();
+$invoice->process();
+
+try{
+    $invoice->invalidAmount(0);
+} catch (CustomException|Exception $e) {
+    echo "Caught CustomException: " . $e->getMessage() . PHP_EOL;
 } finally {
     echo "Finally block executed" . PHP_EOL;
+}
+
+class InvoiceException extends Exception {
+    public static function fromMessage(string $message): static{
+        return new static($message);
+    }
 }

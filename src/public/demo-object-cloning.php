@@ -5,6 +5,10 @@ Objects can be cloned in PHP using the `clone` keyword.
 This creates a shallow copy of the object, meaning that the new object will have the same properties as the original, but they are separate instances.
 
 - magic method `__clone()` can be defined in the class to customize the cloning behavior.
+- Use cases:
+    - When you want to create a copy of an object without affecting the original.
+    - When you want to modify the cloned object without changing the original.
+    - When you want to implement prototype design pattern.
 */
 
 require __DIR__.'/../vendor/autoload.php';
