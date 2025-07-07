@@ -12,19 +12,19 @@
  *
  */
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use App\InvoiceCollection;
 use App\Invoice;
 
-$invoiceCollection = new InvoiceCollection([new Invoice(25),new Invoice(30),new Invoice(35)]);
+$invoiceCollection = new InvoiceCollection([new Invoice(25), new Invoice(30), new Invoice(35)]);
 
 
 //the below approach is used to iterate over the collection of invoices
 //which displays only the visible properties of the Invoice object
 /***
  * Here $invoice is treated as a single property.
- * However, we want to iterate over the properties of the Invoice object and not the * Invoice object itself.
+ * However, we want to iterate over the properties of the Invoice object and not the Invoice object itself.
  * Therefore, we need to use IteratorAggregate or Iterator interface in the InvoiceCollection class.
  * 
  * */
@@ -47,4 +47,4 @@ function printData(iterable $iterable): void
     }
 }
 printData($invoiceCollection);
-printData([1,2,3]);
+printData([1, 2, 3]);
