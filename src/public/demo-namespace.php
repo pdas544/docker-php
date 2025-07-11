@@ -6,4 +6,4 @@ use PaymentGateway\Paddle\Transaction;
 
 $transaction = new Transaction();
 
-var_dump($transaction); 
+var_dump($transaction);

@@ -2,18 +2,20 @@
 
 namespace App\Controllers;
 
+use App\View;
+
 class InvoiceController
 {
 
-    public function index()
+    public function index(): View
     {
         // Logic to fetch and display invoices
-        echo "Displaying all invoices.";
+        return View::make('invoices/index');
     }
 
-    public function create()
+    public function create(): View
     {
         // Logic to create a new invoice
-        echo "Creating a new invoice.";
+        return View::make('invoices/create');
     }
 }
