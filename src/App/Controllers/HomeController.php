@@ -37,48 +37,51 @@ class HomeController
             PDO::ATTR_EMULATE_PREPARES => false,
         ];
         try {
-            $cn = new PDO('mysql:host=pb-mysql;dbname=app_db', 'root', 'root', $options);
-        }
-        catch (PDOException $e) {
+            $cn = new PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_DATABASE'], $_ENV['DB_USER'], $_ENV['DB_PASS'], $options);
+        } catch (PDOException $e) {
             echo $e->getMessage();
         }
-        $name = 'John';
-        $email = 'jane@example.com';
-        $amount = 100;
 
-        try {
-            $cn->beginTransaction();
+            $name = 'John';
+            $email = 'jane@example.com';
+            $amount = 100;
 
-            $newUserStmt = $cn->prepare('INSERT INTO users (name, email) 
+            try {
+                $cn->beginTransaction();
+
+                $newUserStmt = $cn->prepare('INSERT INTO users (name, email) 
                                     VALUES (:name, :email)'
-            );
+                );
 
-            $newInvoiceStmt = $cn->prepare('INSERT INTO invoices (amount, user_id) 
+                $newInvoiceStmt = $cn->prepare('INSERT INTO invoices (amount, user_id) 
                             VALUES (:amount, :user_id)'
-            );;
+                );;
 
-            $newUserStmt->execute(['name' => $name, 'email' => $email]);
+                $newUserStmt->execute(['name' => $name, 'email' => $email]);
 
 
-            $newInvoiceStmt->execute(['amount' => $amount, 'user_id' => $cn->lastInsertId()]);
+                $newInvoiceStmt->execute(['amount' => $amount, 'user_id' => $cn->lastInsertId()]);
 
-            $cn->commit();
-        }catch (PDOException $e) {
-            if( $cn->inTransaction()){$cn->rollBack();}
-        }
+                $cn->commit();
+            } catch (PDOException $e) {
+                if ($cn->inTransaction()) {
+                    $cn->rollBack();
+                }
+            }
 
-        $fetchStmt = $cn->prepare('SELECT invoices.id AS invoice_id, amount, 
+            $fetchStmt = $cn->prepare('SELECT invoices.id AS invoice_id, amount, 
                         name FROM invoices 
                        INNER JOIN users 
                        ON invoices.user_id = users.id
                         WHERE email = :email');
 
-        $fetchStmt->execute(['email' => $email]);
-        $invoices = $fetchStmt->fetchAll();
-        echo '<pre>';
-        print_r($invoices);
-        echo '</pre>';
-        return View::make('index');
-        // echo 'test home';
-    }
+            $fetchStmt->execute(['email' => $email]);
+            $invoices = $fetchStmt->fetchAll();
+            echo '<pre>';
+            print_r($invoices);
+            echo '</pre>';
+            return View::make('index');
+            // echo 'test home';
+        }
+
 }

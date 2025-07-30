@@ -1,5 +1,5 @@
 src/vendor/
-.env
+src/.env
 *.log
 docker-compose.override.yml
 mysql_data/
