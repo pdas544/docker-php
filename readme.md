@@ -12,3 +12,7 @@
 - OOP - Class Constants ✔️
 - OOP - Static Properties ✔️
 
+# Docker Configuration Instructions
+- Check the index.php, Controller and View properly, otherwise Nginx will throw 404 error.
+- Error dated: 03.08.25: HomeController was testing PDO transactions. However, there was no table inside app_db database, Hence Nginx threw 404 error.
+
