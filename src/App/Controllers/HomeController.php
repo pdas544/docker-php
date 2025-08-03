@@ -24,8 +24,8 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\App;
 use App\View;
-use PDO;
 use PDOException;
 
 class HomeController
@@ -33,55 +33,47 @@ class HomeController
     public function index(): View
     {
 
-//        $options = [
-//            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-//            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-//            PDO::ATTR_EMULATE_PREPARES => false,
-//        ];
-//        try {
-//            $cn = new PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_DATABASE'], $_ENV['DB_USER'], $_ENV['DB_PASS'], $options);
-//        } catch (PDOException $e) {
-//            echo $e->getMessage();
-//        }
-//
-//            $name = 'John';
-//            $email = 'jane@example.com';
-//            $amount = 100;
-//
-//            try {
-//                $cn->beginTransaction();
-//
-//                $newUserStmt = $cn->prepare('INSERT INTO users (name, email)
-//                                    VALUES (:name, :email)'
-//                );
-//
-//                $newInvoiceStmt = $cn->prepare('INSERT INTO invoices (amount, user_id)
-//                            VALUES (:amount, :user_id)'
-//                );;
-//
-//                $newUserStmt->execute(['name' => $name, 'email' => $email]);
-//
-//
-//                $newInvoiceStmt->execute(['amount' => $amount, 'user_id' => $cn->lastInsertId()]);
-//
-//                $cn->commit();
-//            } catch (PDOException $e) {
-//                if ($cn->inTransaction()) {
-//                    $cn->rollBack();
-//                }
-//            }
-//
-//            $fetchStmt = $cn->prepare('SELECT invoices.id AS invoice_id, amount,
-//                        name FROM invoices
-//                       INNER JOIN users
-//                       ON invoices.user_id = users.id
-//                        WHERE email = :email');
-//
-//            $fetchStmt->execute(['email' => $email]);
-//            $invoices = $fetchStmt->fetchAll();
-//            echo '<pre>';
-//            print_r($invoices);
-//            echo '</pre>';
+       $db = App::getDb();
+
+
+            $name = 'Tes';
+            $email = 'tes@example.com';
+            $amount = 100;
+
+            try {
+                $db->beginTransaction();
+
+                $newUserStmt = $db->prepare('INSERT INTO users (name, email)
+                                    VALUES (:name, :email)'
+                );
+
+                $newInvoiceStmt = $db->prepare('INSERT INTO invoices (user_id,amount)
+                            VALUES (:user_id, :amount)'
+                );;
+
+                $newUserStmt->execute(['name' => $name, 'email' => $email]);
+
+
+                $newInvoiceStmt->execute(['amount' => $amount, 'user_id' => $db->lastInsertId()]);
+
+                $db->commit();
+            } catch (PDOException $e) {
+                if ($db->inTransaction()) {
+                    $db->rollBack();
+                }
+            }
+
+            $fetchStmt = $db->prepare('SELECT invoices.id AS invoice_id, amount,
+                        name FROM invoices
+                       INNER JOIN users
+                       ON invoices.user_id = users.id
+                        WHERE email = :email');
+
+            $fetchStmt->execute(['email' => $email]);
+            $invoices = $fetchStmt->fetchAll();
+            echo '<pre>';
+            print_r($invoices);
+            echo '</pre>';
             return View::make('index');
 
         }
