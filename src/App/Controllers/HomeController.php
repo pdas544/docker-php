@@ -25,6 +25,9 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\App;
+use App\Models\Invoice;
+use App\Models\SignUp;
+use App\Models\User;
 use App\View;
 use PDOException;
 
@@ -33,48 +36,26 @@ class HomeController
     public function index(): View
     {
 
-       $db = App::getDb();
+            $name = 'Eva';
+            $email = 'Eva@example.com';
+            $amount = 350;
+
+            $userModel = new User();
+            $invoiceModel = new Invoice();
+
+        $invoiceId = (new SignUp($userModel, $invoiceModel))->register(
+            [
+                'name' => $name,
+                'email' => $email,
+            ],
+            [
+                'amount' => $amount,
+
+            ]
+        );
 
 
-            $name = 'Tes';
-            $email = 'tes@example.com';
-            $amount = 100;
-
-            try {
-                $db->beginTransaction();
-
-                $newUserStmt = $db->prepare('INSERT INTO users (name, email)
-                                    VALUES (:name, :email)'
-                );
-
-                $newInvoiceStmt = $db->prepare('INSERT INTO invoices (user_id,amount)
-                            VALUES (:user_id, :amount)'
-                );;
-
-                $newUserStmt->execute(['name' => $name, 'email' => $email]);
-
-
-                $newInvoiceStmt->execute(['amount' => $amount, 'user_id' => $db->lastInsertId()]);
-
-                $db->commit();
-            } catch (PDOException $e) {
-                if ($db->inTransaction()) {
-                    $db->rollBack();
-                }
-            }
-
-            $fetchStmt = $db->prepare('SELECT invoices.id AS invoice_id, amount,
-                        name FROM invoices
-                       INNER JOIN users
-                       ON invoices.user_id = users.id
-                        WHERE email = :email');
-
-            $fetchStmt->execute(['email' => $email]);
-            $invoices = $fetchStmt->fetchAll();
-            echo '<pre>';
-            print_r($invoices);
-            echo '</pre>';
-            return View::make('index');
+        return View::make('index',['invoice'=> $invoiceModel->find($invoiceId)]);
 
         }
 

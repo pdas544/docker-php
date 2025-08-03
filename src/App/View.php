@@ -12,14 +12,15 @@ class View
     public function __construct(protected string $view, protected array $params = []) {}
     public function render(): string
     {
-
         $viewPath = VIEW_PATH . '/' . $this->view . '.php';
-
 
         if (!file_exists($viewPath)) {
             throw new ViewNotFoundException();
         }
 
+        // Extract parameters to make them available in the view
+        extract($this->params);
+        
         ob_start();
 
         include $viewPath;

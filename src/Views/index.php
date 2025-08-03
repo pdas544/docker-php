@@ -8,7 +8,15 @@
 </head>
 
 <body>
-    This is the home page.
+    Invoice Details
+    <hr/>
+
+    <?php if(!empty($invoice)):?>
+    Invoice ID: <?= htmlspecialchars($invoice['id']);?> <br />
+    Invoice Amount: <?= htmlspecialchars($invoice['amount']);?> <br/>
+    User: <?= htmlspecialchars($invoice['name']);?>
+<?php endif;?>
+
 </body>
 
 </html>
