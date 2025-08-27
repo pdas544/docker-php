@@ -29,6 +29,10 @@ class Router
         return $this->register('post', $route, $action);
     }
 
+    public function routes():array{
+        return $this->routes;
+    }
+
     public function resolve(string $requestUri, string $requestMethod)
     {
         $route = explode('?', $requestUri)[0]; // Get the path part of the URI
