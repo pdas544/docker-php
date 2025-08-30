@@ -5,3 +5,4 @@ docker-compose.override.yml
 mysql_data/
 .idea/
 .vscode/
+.phpunit/
