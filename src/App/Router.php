@@ -10,6 +10,7 @@ use App\Exceptions\RouteNotFoundException;
 class Router
 {
     public array $routes = [];
+
     public function register(string $requestMethod, string $route, callable|array $action): self
     {
         // Here you would typically store the route in a routing table
@@ -18,18 +19,21 @@ class Router
 
         return $this;
     }
+
     public function get(string $route, callable|array $action): self
     {
 
 
         return $this->register('get', $route, $action);
     }
+
     public function post(string $route, callable|array $action): self
     {
         return $this->register('post', $route, $action);
     }
 
-    public function routes():array{
+    public function routes(): array
+    {
         return $this->routes;
     }
 
@@ -48,15 +52,19 @@ class Router
             return call_user_func_array($action, []);
         }
 
-        if (is_array($action)) {
-            // If the action is an array, we assume it has a controller and an action
-            [$controllerClass, $method] = $action;
-            if (class_exists($controllerClass) && method_exists($controllerClass, $method)) {
-                $controllerClass = new $controllerClass();
+
+        // If the action is an array, we assume it has a controller and an action
+        [$controllerClass, $method] = $action;
+        if (class_exists($controllerClass)) {
+            $controllerClass = new $controllerClass();
+
+            if (method_exists($controllerClass, $method)) {
                 return call_user_func_array([$controllerClass, $method], []);
             }
         }
 
+
         throw new RouteNotFoundException("Route not found: $route");
+
     }
 }

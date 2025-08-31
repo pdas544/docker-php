@@ -38,7 +38,7 @@ class RouterTest extends TestCase{
             ]
         ];
         //then we assert route was registered
-        $this->assertEquals($expected, $this->router->routes());
+        $this->assertSame($expected, $this->router->routes());
     }
     public function test_it_registers_a_get_route(){
 
@@ -48,7 +48,7 @@ class RouterTest extends TestCase{
                 '/users' => ['Users','index']
             ]
         ];
-        $this->assertEquals($expected, $this->router->routes());
+        $this->assertSame($expected, $this->router->routes());
     }
 
     public function test_it_registers_a_post_route(){
@@ -59,7 +59,7 @@ class RouterTest extends TestCase{
                 '/users' => ['Users','store']
             ]
         ];
-        $this->assertEquals($expected, $this->router->routes());
+        $this->assertSame($expected, $this->router->routes());
     }
 
     public function test_no_routes_on_init(){
@@ -89,4 +89,24 @@ class RouterTest extends TestCase{
             ['/users', 'POST'],
         ];
     }
+
+    #[Test]
+    public function it_resolves_a_route_from_closure(){
+        $this->router->get('/users',fn()=>[1,2,3]);
+
+        $this->assertSame([1,2,3], $this->router->resolve('/users','get'));
+
+    }
+    #[Test]
+    public function it_resolves_a_route(){
+        $users  = new class(){
+            public function index():array{
+                return [1,2,3];
+
+            }
+
+        };
+        $this->router->get('/users', [$users::class,'index']);
+        $this->assertSame([1,2,3], $this->router->resolve('/users','get'));
+}
 }
